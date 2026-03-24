@@ -3,6 +3,7 @@ package com.dims.marketplace.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -10,15 +11,16 @@ import java.util.UUID;
 @Getter
 @Setter
 @NoArgsConstructor
-@Table(name = "users")
-public class User {
+@Table(name = "product_variants")
+public class ProductVariant {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
-    @Column(name = "full_name")
-    private String fullname;
-    private String email;
-    private String password;
+    @ManyToOne
+    @JoinColumn(name = "product_id")
+    private Product product;
+    private String sku;
+    private BigDecimal price;
     @Column(name = "created_at")
-    private LocalDateTime createTime;
+    private LocalDateTime createdAt;
 }

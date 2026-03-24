@@ -10,15 +10,13 @@ import java.util.UUID;
 @Getter
 @Setter
 @NoArgsConstructor
-@Table(name = "users")
-public class User {
+@Table(name = "products")
+public class Product {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
-    @Column(name = "full_name")
-    private String fullname;
-    private String email;
-    private String password;
+    private String name;
+    private String description;
     @Column(name = "created_at")
-    private LocalDateTime createTime;
+    private LocalDateTime createdAt;
 }
