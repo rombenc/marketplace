@@ -2,38 +2,40 @@ package com.dims.marketplace.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.UUID;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
-@Builder
-@Table(name = "products")
-public class Product {
-
+@Table(name = "product_variants")
+public class Variant {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    private String name;
-    private String description;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_id", nullable = false)
+    private Product product;
 
-    @Column(name = "created_at", nullable = false, updatable = false)
+    @Column(nullable = false, unique = true)
+    private String sku;
+
+    private String size;
+
+    private Integer stock;
+
+    @Column(nullable = false)
+    private BigDecimal price;
+
+    @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
-
-    @ManyToOne
-    @JoinColumn(name = "created_by", nullable = false)
-    private User createdBy;
-
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
-    private List<Variant> variants;
 
     @PrePersist
     public void prePersist() {

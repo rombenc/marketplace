@@ -1,0 +1,1 @@
+ALTER TABLE product_variants RENAME COLUMN name TO size;

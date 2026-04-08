@@ -1,0 +1,2 @@
+ALTER TABLE product_variants ADD COLUMN stock INTEGER DEFAULT 0;
+ALTER TABLE product_variants ADD COLUMN name VARCHAR(20);

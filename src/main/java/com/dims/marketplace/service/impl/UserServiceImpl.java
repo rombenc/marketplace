@@ -1,14 +1,16 @@
 package com.dims.marketplace.service.impl;
 
+import com.dims.marketplace.dto.enums.Role;
 import com.dims.marketplace.dto.user.UserRequest;
 import com.dims.marketplace.dto.user.update.UserUpdateRequest;
 import com.dims.marketplace.entity.User;
 import com.dims.marketplace.exceptions.DuplicateException;
 import com.dims.marketplace.exceptions.NotFoundException;
-import com.dims.marketplace.exceptions.UnauthorizedException;
 import com.dims.marketplace.repository.UserRepository;
 import com.dims.marketplace.service.inter.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,13 +33,19 @@ public class UserServiceImpl implements UserService {
         User user = new User();
         user.setFullName(request.getFullName());
         user.setEmail(request.getEmail());
+        user.setRole(request.getRole());
         user.setPassword(request.getPassword());
         return userRepository.save(user);
     }
 
     @Override
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
+    public Page<User> getAllUsers(Pageable pageable) {
+        return userRepository.findAll(pageable);
+    }
+
+    @Override
+    public List<User> getUsersByRole(Role role) {
+        return userRepository.findByRole(role);
     }
 
     @Override
@@ -50,16 +58,18 @@ public class UserServiceImpl implements UserService {
         return userRepository.findByEmail(email).orElseThrow(()-> new NotFoundException("user with given email cannot be found."));
     }
 
+    // need fix: field email bisa kosong ketika di update
     @Override
     public User updateUser (UUID id, UserUpdateRequest request) {
         User user = userRepository.findById(id)
                 .orElseThrow( () -> new NotFoundException("User not found"));
         // supaya gak ngetag email sendiri sebagai duplicate
         if (request.getEmail() != null &&
+                !request.getEmail().isBlank() &&
                 !request.getEmail().equals(user.getEmail()) &&
                 userRepository.existsByEmail(request.getEmail())) {
 
-            throw new DuplicateException("email is already used by the current user");
+            throw new DuplicateException("Email is already registered");
         }
 
         if (request.getFullName() != null) {

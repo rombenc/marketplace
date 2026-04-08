@@ -1,8 +1,11 @@
 package com.dims.marketplace.service.inter;
 
+import com.dims.marketplace.dto.enums.Role;
 import com.dims.marketplace.dto.user.UserRequest;
 import com.dims.marketplace.dto.user.update.UserUpdateRequest;
 import com.dims.marketplace.entity.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.UUID;
@@ -10,7 +13,9 @@ import java.util.UUID;
 public interface UserService {
     User createUser (UserRequest request);
 
-    List<User> getAllUsers();
+    Page<User> getAllUsers(Pageable pageable);
+
+    List<User> getUsersByRole(Role role);
 
     User getUserById(UUID id);
 

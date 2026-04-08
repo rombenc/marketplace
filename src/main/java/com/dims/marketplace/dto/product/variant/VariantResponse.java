@@ -13,8 +13,9 @@ import java.util.UUID;
 @NoArgsConstructor
 public class VariantResponse {
     private UUID id;
-    private UUID productId;
     private String sku;
+    private String size;
     private BigDecimal price;
+    private Integer stock;
     private LocalDateTime createdAt;
 }

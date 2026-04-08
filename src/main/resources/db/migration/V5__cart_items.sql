@@ -4,6 +4,10 @@ CREATE TABLE cart_items (
     product_Variant_id UUID NOT NULL,
     quantity INT NOT NULL CHECK (quantity > 0),
 
+    -- timestamps
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
     CONSTRAINT fk_cart_item_cart
                         FOREIGN KEY (cart_id)
                         REFERENCES carts(id)
